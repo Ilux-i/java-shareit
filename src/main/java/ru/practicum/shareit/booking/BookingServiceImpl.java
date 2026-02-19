@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.dto.ApprovedBookingDto;
@@ -18,14 +18,12 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    @Autowired
-    private BookingRepository rep;
-    @Autowired
-    private ItemService itemService;
-    @Autowired
-    private UserService userService;
+    private final BookingRepository rep;
+    private final ItemService itemService;
+    private final UserService userService;
 
     @Override
     public Booking addBooking(AddBookingDto dto) {
@@ -37,7 +35,6 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("Отсутствие части, либо всех начальных данных");
         if (dto.getStart().isAfter(dto.getEnd()) ||
                 dto.getStart().isEqual(dto.getEnd())
-//                || dto.getStart().isBefore(LocalDateTime.now())
         )
             throw new ValidationException("Передан невозможный временной отрезок");
         // Проверка на существование бронирующего

@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.user.dto.CreateUserDto;
 import ru.practicum.shareit.user.dto.UpdateUserDto;
+import ru.practicum.shareit.user.dto.UserDto;
 
 @UtilityClass
 public class UserMapper {
@@ -21,4 +22,11 @@ public class UserMapper {
         return user;
     }
 
+    public UserDto toUserDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
 }

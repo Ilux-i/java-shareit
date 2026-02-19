@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.comment.NewCommentDto;
-import ru.practicum.shareit.comment.ResponseCommentDto;
+import ru.practicum.shareit.comment.dto.NewCommentDto;
+import ru.practicum.shareit.comment.dto.ResponseCommentDto;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.ResponseItemDto;
 import ru.practicum.shareit.item.dto.SearchItemDto;

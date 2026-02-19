@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.AddBookingDto;
 import ru.practicum.shareit.booking.dto.ApprovedBookingDto;
@@ -10,17 +10,14 @@ import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-bookings.
- */
 @RestController
 @RequestMapping(path = "/bookings")
+@RequiredArgsConstructor
 public class BookingController {
 
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-    @Autowired
-    private BookingService service;
+    private final BookingService service;
 
     @GetMapping("/{bookingId}")
     public Booking getBooking(@RequestHeader(USER_ID_HEADER) Long userId,

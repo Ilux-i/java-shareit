@@ -1,8 +1,8 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.comment.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ResponseCommentDto {
     private final Long id;
     private final String text;
-    private final Item item;
+    private final ItemDto item;
     private final String authorName;
     private final LocalDateTime created;
 }

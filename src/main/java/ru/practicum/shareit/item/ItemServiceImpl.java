@@ -1,14 +1,14 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.comment.CommentRepository;
-import ru.practicum.shareit.comment.NewCommentDto;
-import ru.practicum.shareit.comment.ResponseCommentDto;
+import ru.practicum.shareit.comment.dto.NewCommentDto;
+import ru.practicum.shareit.comment.dto.ResponseCommentDto;
 import ru.practicum.shareit.exception.AccessRightsException;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -26,11 +26,8 @@ import java.util.Collection;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository rep;
-    @Autowired
     private final UserService userService;
-    @Autowired
     private final CommentRepository commentRepository;
-    @Autowired
     private final BookingRepository bookingRepository;
 
     @Override
@@ -72,7 +69,7 @@ public class ItemServiceImpl implements ItemService {
         );
         return ResponseCommentDto.builder()
                 .id(comment.getId())
-                .item(comment.getItem())
+                .item(ItemMapper.toItemDto(comment.getItem()))
                 .authorName(comment.getAuthor().getName())
                 .text(comment.getText())
                 .created(comment.getCreated())
@@ -103,9 +100,11 @@ public class ItemServiceImpl implements ItemService {
     public ResponseItemDto getFullById(Long itemId) {
         ResponseItemDto response = new ResponseItemDto(getOne(itemId));
         LocalDateTime now = LocalDateTime.now();
-        response.setLastBooking(bookingRepository.findLastBookingById(itemId, now).orElse(null));
+        response.setLastBooking(BookingMapper.toBookingDto(
+                bookingRepository.findLastBookingById(itemId, now).orElse(null)));
         response.setLastBooking(null);
-        response.setNextBooking(bookingRepository.findNextBookingById(itemId, now).orElse(null));
+        response.setNextBooking(BookingMapper.toBookingDto(
+                bookingRepository.findNextBookingById(itemId, now).orElse(null)));
         response.setComments(commentRepository.findCommentsByItemId(itemId));
         return response;
     }

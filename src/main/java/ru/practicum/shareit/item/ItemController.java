@@ -1,11 +1,10 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.comment.NewCommentDto;
-import ru.practicum.shareit.comment.ResponseCommentDto;
-import ru.practicum.shareit.comment.TextDto;
+import ru.practicum.shareit.comment.dto.NewCommentDto;
+import ru.practicum.shareit.comment.dto.ResponseCommentDto;
+import ru.practicum.shareit.comment.dto.TextDto;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
@@ -18,7 +17,6 @@ public class ItemController {
 
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-    @Autowired
     private final ItemService itemService;
 
     // Добавление Item
