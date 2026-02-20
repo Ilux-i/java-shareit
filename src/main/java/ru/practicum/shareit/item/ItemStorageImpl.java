@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.NewItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -20,12 +18,11 @@ public class ItemStorageImpl implements ItemStorage {
     private Map<Long, Item> items = new HashMap<>();
     private Long counter = 0L;
 
-    @Autowired
     private final UserService userService;
 
     @Override
     public Item add(NewItemDto newItemDto) {
-        Item item = ItemMapper.toItem(newItemDto);
+        Item item = ItemMapper.toItem(newItemDto, null);
         valid(item);
         item.setId(getCounter());
         items.put(item.getId(), item);
@@ -34,7 +31,7 @@ public class ItemStorageImpl implements ItemStorage {
 
     @Override
     public Item update(UpdateItemDto updateItemDto) {
-        Item item = ItemMapper.toItem(updateItemDto);
+        Item item = ItemMapper.toItem(updateItemDto, null);
         valid(item);
         items.put(item.getId(), item);
         return item;
@@ -49,7 +46,7 @@ public class ItemStorageImpl implements ItemStorage {
     @Override
     public Collection<Item> getByOwner(Long id) {
         return items.values().stream()
-                .filter(item -> item.getOwnerId().equals(id))
+                .filter(item -> item.getOwner().getId().equals(id))
                 .collect(Collectors.toSet());
     }
 
@@ -82,12 +79,10 @@ public class ItemStorageImpl implements ItemStorage {
         if (item.getName() == null ||
                 item.getName().isEmpty() ||
                 item.getDescription() == null ||
-                item.getOwnerId() == null ||
+                item.getOwner() == null ||
                 item.getAvailable() == null
-        ) {
-            throw new ValidationException("Invalid item");
-        }
-        userService.contains(item.getOwnerId());
+        )
+            userService.contains(item.getOwner().getId());
     }
 
     private void contains(Long itemId) {

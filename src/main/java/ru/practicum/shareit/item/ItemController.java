@@ -1,8 +1,10 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.dto.NewCommentDto;
+import ru.practicum.shareit.comment.dto.ResponseCommentDto;
+import ru.practicum.shareit.comment.dto.TextDto;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
@@ -15,7 +17,6 @@ public class ItemController {
 
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-    @Autowired
     private final ItemService itemService;
 
     // Добавление Item
@@ -25,19 +26,26 @@ public class ItemController {
         return itemService.add(new NewItemDto(userId, itemDto));
     }
 
+    // Добавление комментариев
+    @PostMapping("/{itemId}/comment")
+    public ResponseCommentDto addComment(@RequestHeader(USER_ID_HEADER) Long userId,
+                                         @RequestBody TextDto dto,
+                                         @PathVariable Long itemId) {
+        return itemService.addComment(new NewCommentDto(userId, itemId, dto.getText()));
+    }
+
     // Редактирование Item
     @PatchMapping("/{itemId}")
     public Item update(@RequestHeader(USER_ID_HEADER) Long userId,
                        @PathVariable("itemId") Long itemId,
                        @RequestBody ItemDto itemDto) {
-        return itemService.update(itemId, new NewItemDto(userId, itemDto));
+        return itemService.update(new UpdateItemDto(itemId, userId, itemDto));
     }
 
     // Получение Item по его id
     @GetMapping("/{itemId}")
-    public Item getOne(@RequestHeader(USER_ID_HEADER) Long userId,
-                       @PathVariable("itemId") Long itemId) {
-        return itemService.getOne(new GetItemDto(userId, itemId));
+    public ResponseItemDto getOne(@PathVariable("itemId") Long itemId) {
+        return itemService.getFullById(itemId);
     }
 
     // Получение Items по владельцу

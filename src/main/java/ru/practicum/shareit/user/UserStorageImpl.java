@@ -3,7 +3,6 @@ package ru.practicum.shareit.user;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.ObjectNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +72,6 @@ public class UserStorageImpl implements UserStorage {
         if (userId == null ||
                 !users.containsKey(userId)) {
             log.warn("Пользователь с id: {} не найден", userId);
-            throw new ObjectNotFoundException("Пользователь с id: " + userId + " не найден");
         }
     }
 }
